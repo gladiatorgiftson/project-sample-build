@@ -1,0 +1,81 @@
+bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser
+                .save()
+                .then(user => {
+                  req.flash(
+                    'success_msg',
+                    'You are now registered and can log in'
+                  );
+                  res.redirect('/login');
+                })
+                .catch(err => console.log(err));
+            });
+          });
+
+
+router.post("/", async (req, res) => {
+  const { name, email, password1, password2 } = req.body;
+  let errors = [];
+
+  // check string not equal to null
+  if (!name || !email || !password1 || !password2) {
+    errors.push({ msg: "Please fill all fields" });
+  }
+
+  // check password
+  if (password1 !== password2) {
+    errors.push({ msg: "Password doesnot match" });
+  }
+
+  //check password length
+  if (password1.length < 6) {
+    errors.push({ msg: "Password must be at least 6 characters" });
+  }
+
+  if (errors.length > 0) {
+    res.render("register/register", {
+      errors,
+      name,
+      email,
+      password1,
+      password2,
+    });
+  } else {
+    User.findOne({ email: email }).then(user => {
+        if (user) {
+          errors.push({ msg: 'Email already exists' });
+          res.render('register/register', {
+            errors,
+            name,
+            email,
+            password1,
+            password2
+          });
+        } else {
+          const newUser = new User({
+            name,
+            email,
+            password1
+          });
+  
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password1, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password1 = hash;
+              newUser
+                .save()
+                .then(user => {
+                  req.flash(
+                    'success_msg',
+                    'You are now registered and can log in'
+                  );
+                  res.redirect('/users/login');
+                })
+                .catch(err => console.log(err));
+            });
+          });
+  }
+});
