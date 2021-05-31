@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Receiver</th>
+        <th scope="col">Data Type</th>
+        <th scope="col">Sender</th>
+        <th scope="col"> Data</th>
+      </tr>
+    </thead>
+    <% dData.forEach(data=>{ %> 
+    <tbody>
+    <tr>
+        <td><%= data.owner %> </td>
+        <td><%= data.fileType %> </td>
+        <td><%= data.sender %> </td>
+        <td>
+            <%= data.data %> 
+        </td>
+      </tr>
+    <% }) %> 
+    </tbody>
+  </table>
+

@@ -8,12 +8,15 @@ const methodOverride = require('method-override');
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('passport')
+const cookieParser = require('cookie-parser')
 
 const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const homeRouter = require('./routes/home')
 const registerRouter = require('./routes/register.js')
 const dashBoardRouter = require('./routes/dashboard')
+const uploadRouter = require('./routes/upload')
+const downloadRouter = require('./routes/download')
 
 const app = express();
 const mongoose = require('mongoose');
@@ -47,7 +50,7 @@ app.use(passport.session());
 
 //using flash 
 app.use(flash());
-
+app.use(cookieParser())
 //setting up global variable
 
 app.use(function(req, res, next) {
@@ -69,6 +72,8 @@ app.use('/login',loginRouter)
 app.use('/home', homeRouter)
 app.use('/register', registerRouter)
 app.use('/dashboard', dashBoardRouter)
-
+app.use('/upload', uploadRouter)
+app.use('/download', downloadRouter)
 
 app.listen(process.env.PORT || 3000);
+
